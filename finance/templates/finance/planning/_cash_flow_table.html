@@ -1,0 +1,75 @@
+{% load humanize %}
+
+<div class="panel panel-default" id="cash-flow">
+  <div class="panel-heading">
+    Receitas por Categoria
+    <small>{{ cash_flow_start|date:"M Y" }} - {{ cash_flow_end|date:"M Y" }}</small>
+  </div>
+  <table class="table table-striped table-hover">
+    <thead>
+    <tr>
+      <th style="width: 14.28%"></th>
+      {% for month in cash_flow.month_range %}
+        <th style="width: 14.28%" class="text-center">{{ month.date|date:"M Y" }}</th>
+      {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for category in cash_flow.credit_categories %}
+      <tr>
+        <td>{{ category }}</td>
+        {% for result in cash_flow.credit_results %}
+          {% if result.category == category %}
+            <td class="text-center">$ {{ result.amount.0|intcomma }}</td>
+          {% endif %}
+        {% endfor %}
+      </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+    <tr>
+      <td></td>
+      {% for total in cash_flow.total_credit_results %}
+        <td class="text-center text-success text-strong">$ {{ total.amount|intcomma }}</td>
+      {% endfor %}
+    </tr>
+    </tfoot>
+  </table>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    Despesas por Categoria
+    <small>{{ cash_flow_start|date:"M Y" }} - {{ cash_flow_end|date:"M Y" }}</small>
+  </div>
+  <table class="table table-striped table-hover">
+    <thead>
+    <tr>
+      <th style="width: 14.28%"></th>
+      {% for month in cash_flow.month_range %}
+        <th style="width: 14.28%" class="text-center">{{ month.date|date:"M Y" }}</th>
+      {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for category in cash_flow.debit_categories %}
+      <tr>
+        <td>{{ category }}</td>
+        {% for result in cash_flow.debit_results %}
+          {% if result.category == category %}
+            <td class="text-center">$ {{ result.amount.0|intcomma }}</td>
+          {% endif %}
+        {% endfor %}
+      </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+    <tr>
+      <td></td>
+      {% for total in cash_flow.total_debit_results %}
+        <td class="text-center text-danger text-strong">$ {{ total.amount|intcomma }}</td>
+      {% endfor %}
+    </tr>
+    </tfoot>
+  </table>
+</div>

@@ -1,0 +1,23 @@
+{% load humanize %}
+
+<table class="table table-bordered table-condensed">
+  <thead>
+  <tr>
+    <th style="width:34%">{{ category.name }}</th>
+    <th style="width:33%">{{ two_months_ago|date:"F" }}</th>
+    <th style="width:33%">{{ one_month_ago|date:"F" }}</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="text-success">{% trans "Incomes" %}</td>
+      <td class="text-success">$ {{ two_months_ago_credit|intcomma }}</td>
+      <td class="text-success">$ {{ one_month_ago_credit|intcomma }}</td>
+    </tr>
+    <tr>
+      <td class="text-danger">{% trans "Expenses" %}</td>
+      <td class="text-danger">$ {{ two_months_ago_debit|intcomma }}</td>
+    <td class="text-danger">$ {{ one_month_ago_debit|intcomma }}</td>
+    </tr>
+  </tbody>
+</table>

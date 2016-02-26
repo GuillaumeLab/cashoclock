@@ -1,0 +1,71 @@
+{% load humanize utils transactions %}
+
+<table class="table table-hover table-striped">
+  <thead>
+  <tr>
+    <th style="width: 80px">Data</th>
+    <th>Descrição</th>
+    <th style="width: 140px" class="hidden-xs">Conta</th>
+    <th style="width: 140px" class="hidden-xs">Categoria</th>
+    <th style="width: 120px" class="text-right">Valor</th>
+    <th style="width: 50px"></th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for transaction in transactions %}
+    <tr id="{{ transaction.pk }}" class="{% if not transaction.payed %}text-muted{% endif %}">
+      <td>
+        {{ transaction.date|date:"d/m/Y" }}
+      </td>
+      <td title="{{ transaction.description }}">
+        <table class="fixed-table">
+          <tr>
+            <td>
+              {% if transaction.installment_total > 1 %}
+                [{{ transaction.installment_number }}/{{ transaction.installment_total }}]
+              {% endif %}
+              {{ transaction.description }}
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td class="hidden-xs">{{ transaction.account.name }}</td>
+      <td class="hidden-xs">{{ transaction.category.name }}</td>
+      {% if transaction.is_credit %}
+        <td class="text-right text-success">$ {{ transaction.amount|intcomma }}</td>
+      {% else %}
+        <td class="text-right text-danger">$ {{ transaction.amount|intcomma }}</td>
+      {% endif %}
+      <td class="text-center">
+        <a href='{% url 'transactions-edit' pk=transaction.pk %}?next={{ request.build_absolute_uri|urlencode }}'>Editar</a>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+  <tfoot>
+  <tr>
+    <td></td>
+    <td class="hidden-xs"></td>
+    <td class="hidden-xs"></td>
+    <td>
+      <strong>Saldo</strong>
+    </td>
+    <td class="text-right text-{{ credit_balance|sub:debit_balance|amount_color }}">
+      <strong>$ {{ credit_balance|sub:debit_balance|intcomma }} </strong>
+    </td>
+    <td></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td class="hidden-xs"></td>
+    <td class="hidden-xs"></td>
+    <td>
+      <strong>Total Geral</strong>
+    </td>
+    <td class="text-right text-{{ total_balance|amount_color }}">
+      <strong>$ {{ total_balance|intcomma }} </strong>
+    </td>
+    <td></td>
+  </tr>
+  </tfoot>
+</table>

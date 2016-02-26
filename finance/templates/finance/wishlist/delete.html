@@ -1,0 +1,25 @@
+{% extends 'common/layout.html' %}
+
+{% block title %}Lista de Desejos{% endblock %}
+
+{% block body %}
+  <div class="container-fluid">
+    <div class="page-header">
+      <h1>Lista de Desejos <small>Planejamento</small></h1>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="panel panel-danger">
+      <div class="panel-heading">Atenção!</div>
+      <div class="panel-body">
+        <p>Tem certeza que deseja excluir o item <strong>{{ object.name }}</strong> da lista de desejos?</p>
+        <form action="" method="post">{% csrf_token %}
+          <button type="submit" class="btn btn-danger">Excluir Item</button>
+          {% url 'wishlist-list' as ret_url %}
+          <a href="{{ request.REQUEST.next|default:ret_url }}" class="btn btn-link">Cancelar</a>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

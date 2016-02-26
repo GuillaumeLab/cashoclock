@@ -1,0 +1,26 @@
+{% extends 'common/layout.html' %}
+
+{% block title %}Lista de Desejos{% endblock %}
+
+{% block body %}
+  <div class="container-fluid">
+    <div class="page-header">
+      <h1>Lista de Desejos <small>Planejamento</small></h1>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <form action="{% url 'wishlist-create' %}" method="post" class="p20-md">
+          {% include 'finance/wishlist/_form.html' %}
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            {% url 'wishlist-list' as ret_url %}
+            <a href="{{ request.REQUEST.next|default:ret_url }}" class="btn btn-link">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

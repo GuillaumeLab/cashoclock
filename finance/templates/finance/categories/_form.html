@@ -1,0 +1,7 @@
+{% load widget_tweaks %}
+{% csrf_token %}
+
+{{ form.non_field_errors }}
+{% render_field form.next type="hidden" %}
+
+{% include 'finance/form/_vfield.html' with field=form.name %}

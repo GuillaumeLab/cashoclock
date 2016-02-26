@@ -1,0 +1,25 @@
+{% extends 'common/layout.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Budgets" %}{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <div class="page-header">
+      <h1>{% trans "New Budget" %}</h1>
+    </div>
+    
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <form action="{% url 'budgets-create' %}" method="post" class="p10-md">
+          {% include 'finance/budgets/_form.html' %}
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+            {% url 'budgets-list' as ret_url %}
+            <a href="{{ request.REQUEST.next|default:ret_url }}" class="btn btn-link">{% trans "Cancel" %}</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

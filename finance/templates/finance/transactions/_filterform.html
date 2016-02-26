@@ -1,0 +1,30 @@
+{% load widget_tweaks %}
+
+<div class="row">
+  <div class="col-xs-6">
+    {% include 'finance/form/_vfield.html' with field=form.start class='form-control datepicker' %}
+  </div>
+  <div class="col-xs-6">
+    {% include 'finance/form/_vfield.html' with field=form.end class='form-control datepicker' %}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-6">
+    {% include 'finance/form/_vfield.html' with field=form.account placeholder='Todas' %}
+  </div>
+  <div class="col-xs-6">
+    {% include 'finance/form/_vfield.html' with field=form.category placeholder='Todas' %}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-6">
+    {% include 'finance/form/_vfield.html' with field=form.type placeholder='Todos' %}
+  </div>
+  <div class="col-xs-6">
+    {% include 'finance/form/_vfield.html' with field=form.is_payed placeholder='Todos' %}
+  </div>
+</div>
+
+{% include 'finance/form/_vfield.html' with field=form.description %}

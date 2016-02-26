@@ -1,0 +1,28 @@
+{% load humanize wishlist %}
+
+<table class="hidden-xs table table-striped table-hover">
+  <thead>
+  <tr>
+    <th>Nome</th>
+    <th>URL</th>
+    <th style="width: 150px">Preço</th>
+    <th style="width: 180px">Categoria</th>
+    <th style="width: 150px">Prioridade</th>
+    <th style="width: 80px"></th>
+  </tr>
+  </thead>
+  <tbody>
+    {% for object in object_list %}
+    <tr>
+      <td>{{ object.name }}</td>
+      <td><a href="{{ object.url }}" target="_blank">{{ object.url }}</a></td>
+      <td>$ {{ object.price|intcomma }}</td>
+      <td>{{ object.category }}</td>
+      <td>{{ object.priority|priority_str }}</td>
+      <td class="text-center">
+        <a href="{% url 'wishlist-edit' pk=object.pk %}?next={{ request.build_absolute_uri|urlencode }}">Editar</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

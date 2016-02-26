@@ -1,0 +1,100 @@
+{% extends 'common/layout.html' %}
+{% load humanize staticfiles %}
+
+{% block title %}Planejamento{% endblock %}
+
+{% block scripts %}
+  <script>
+    $(function () {
+      c3.generate({
+        bindto: "#six-incomes-expenses-chart",
+        data: {
+          rows: [
+            ['Receitas', 'Despesas'],
+            {% for row in incomes_expenses %}
+              [{{ row.incomes|stringformat:"f" }}, {{ row.expenses|stringformat:"f" }}],
+            {% endfor %}
+          ],
+          type: 'bar'
+        },
+        axis: {
+          x: {
+            type: 'category',
+            categories: [
+              {% for row in incomes_expenses %}
+                '{{ row.date|date:"M Y" }}',
+              {% endfor %}
+            ]
+          },
+          y: {
+            tick: {
+              format: D3BR.numberFormat("$,.f")
+            }
+          }
+        },
+        legend: {show: false},
+        color: {pattern: ["#43AC6A", "#F04124"]}
+      });
+
+      c3.generate({
+        bindto: "#assets-balance-chart",
+        data: {
+          rows: [
+            ['$'],
+            {% for balance in assets_balance %}
+              [{{ balance.1|floatformat:"f" }}],
+            {% endfor %}
+          ],
+          types: {'$': 'area'}
+        },
+        axis: {
+          x: {
+            type: 'category',
+            categories: [
+              {% for balance in assets_balance %}
+                '{{ balance.0|date:"M Y" }}',
+              {% endfor %}
+            ]
+          },
+          y: {
+            tick: {
+              format: D3BR.numberFormat("$,.f")
+            }
+          }
+        },
+        legend: {show: false},
+        color: {pattern: ['#008CBA']}
+      });
+    });
+  </script>
+{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <div class="page-header">
+      <h1>Fluxo de Caixa</h1>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        Receitas x Despesas
+        <small>{{ start|date:"M Y" }} - {{ end|date:"M Y" }}</small>
+      </div>
+      <div class="panel-body">
+        <div id="six-incomes-expenses-chart" style="height: 300px;"></div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        Evolução dos Ativos
+        <small>{{ start|date:"M Y" }} - {{ end|date:"M Y" }}</small>
+      </div>
+      <div class="panel-body">
+        <div id="assets-balance-chart" style="height: 300px;"></div>
+      </div>
+    </div>
+  
+    {% include 'finance/planning/_cash_flow_table.html' %}
+  </div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'common/layout.html' %}
+{% load humanize accounts budgets transactions %}
+
+{% block title %}Lista de Desejos{% endblock %}
+
+{% block body %}
+  <div class="container-fluid">
+    <div class="page-header">
+      <h1>Lista de Desejos <small>Planejamento</small></h1>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <a class="btn btn-primary" href="{% url 'wishlist-create' %}?next={{ request.build_absolute_uri|urlencode }}">Adicionar Item</a>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      {% if object_list %}
+        {% include 'finance/wishlist/_list_full.html' %}
+        {% include 'finance/wishlist/_list_mobile.html' %}
+      {% else %}
+        <div class="blank-slate">
+          <div class="blank-slate-title">Nenhuma item cadastro na sua Lista de Desejos</div>
+          <div class="blank-slate-body">
+            <a class="btn btn-primary" href="{% url 'wishlist-create' %}?next={{ request.build_absolute_uri|urlencode }}">Adicionar Item</a>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'common/layout.html' %}
+
+{% block scripts %}
+  <script>
+    $(function () {
+      widget("accounts_panel");
+      widget("cashflow_panel");
+      widget("budgets_panel");
+      widget("incomes_expenses_per_day");
+      widget("incomes_expenses_per_month");
+      widget("top_expenses_per_category");
+      widget("assets_balance");
+    });
+  </script>
+{% endblock %}
+
+{% block body %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-6">
+        <div id="cashflow_panel"></div>
+        <div id="budgets_panel"></div>
+      </div>
+      <div class="col-xs-6">
+        <div id="accounts_panel"></div>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-xs-6">
+        <div id="incomes_expenses_per_day"></div>
+      </div>
+      <div class="col-xs-6">
+        <div id="incomes_expenses_per_month"></div>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-xs-6">
+        <div id="assets_balance"></div>
+      </div>
+      <div class="col-xs-6">
+        <div id="top_expenses_per_category"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

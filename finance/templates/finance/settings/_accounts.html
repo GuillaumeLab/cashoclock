@@ -1,0 +1,41 @@
+{% load humanize transactions accounts %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">Contas</div>
+  <div class="panel-body">
+    <a href="{% url 'accounts-create' %}?next={{ request.build_absolute_uri|urlencode }}" class="btn btn-default">Adicionar</a>
+  </div>
+  
+  <table class="table table-hover table-striped">
+    <thead>
+    <tr>
+      <th>Conta</th>
+      <th style="width: 150px" class="text-right">Saldo</th>
+      <th style="width: 50px"></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for account in accounts.0 %}
+      <tr>
+        <td>
+          <a href="{% url 'accounts-detail' pk=account.0.pk %}">{{ account.0.name }}</a>
+        </td>
+        <td class="text-right text-{{ account.1|amount_color }}">$ {{ account.1|intcomma }}</td>
+        <td class="text-center">
+          <a href="{% url 'accounts-edit' pk=account.0.pk %}?next={{ request.build_absolute_uri|urlencode }}">Editar</a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+    <tr>
+      <td></td>
+      <td class="text-right text-{{ accounts.1|amount_color }}">
+        <strong>$ {{ accounts.1|intcomma }}</strong>
+      </td>
+      <td></td>
+    </tr>
+    </tfoot>
+  </table>
+
+</div>

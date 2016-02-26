@@ -1,0 +1,51 @@
+{% extends 'common/layout.html' %}
+{% load humanize %}
+
+{% block title %}Transações{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <div class="page-header"><h1>Excluir Transação</h1></div>
+  
+    <div class="panel panel-danger">
+      <div class="panel-heading">Atenção!</div>
+      <div class="panel-body">
+        {% if object.recurrence_key %}
+          <p>
+            {% with count_recurrence=recurrence|length %}
+              Esta transação faz parte de uma recorrência com
+              <strong>{{ count_recurrence }}</strong> transaç{{ count_recurrence|pluralize:"ão,ões" }}.
+            {% endwith %}
+            <br/>
+            Deseja excluir apenas esta transação do dia
+            <strong>{{ object.date }}</strong>, ou excluir
+            <strong>todas</strong> as transações da recorrência?
+          </p>
+          <form action="" method="post">{% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+            <button type="submit" name="one" class="btn btn-danger">Excluir apenas esta</button>
+            <button type="submit" name="not-payed" class="btn btn-danger">Excluir apenas NÃO pagas</button>
+            <button type="submit" name="all" class="btn btn-danger">Excluir todas</button>
+            {% url 'transactions-list' as ret_url %}
+            <a href="{{ request.REQUEST.next|default:ret_url }}" class="btn btn-link">Cancelar</a>
+          </form>
+        {% else %}
+          <p>
+            Tem certeza que deseja excluir a transação
+            <strong>{{ object.description }}</strong>
+            do dia <strong>{{ object.date }}</strong>
+            no valor de <strong>$ {{ object.amount|intcomma }}</strong>
+            da conta <strong>{{ object.account.name }}</strong>?
+          </p>
+
+          <form action="" method="post">{% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+            <button type="submit" name="one" class="btn btn-danger">Excluir transação</button>
+            {% url 'transactions-list' as ret_url %}
+            <a href="{{ request.REQUEST.next|default:ret_url }}" class="btn btn-link">Cancelar</a>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

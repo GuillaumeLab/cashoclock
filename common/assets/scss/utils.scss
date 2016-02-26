@@ -1,0 +1,52 @@
+@import "variables";
+
+// type
+
+.text-strong {
+  font-weight: 500;
+}
+
+// margins and paddings
+
+.mb5 {
+  margin-bottom: 5px;
+}
+
+.mb0 {
+  margin-bottom: 0;
+}
+
+.mt15 {
+  margin-top: 15px;
+}
+
+.p20-md {
+  @media (min-width: $screen-sm-min) {
+    padding: 20px;
+  }
+}
+
+.p10-md {
+  @media (min-width: $screen-sm-min) {
+    padding: 10px;
+  }
+}
+
+// charts
+
+.hide-x {
+  .c3-axis-x .tick {
+    text {
+      display: none !important;
+    }
+  }
+}
+
+.hide-y {
+  .c3-axis-y .tick {
+    text {
+      display: none !important;
+    }
+  }
+}
+

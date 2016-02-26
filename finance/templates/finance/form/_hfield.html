@@ -1,0 +1,17 @@
+{% load widget_tweaks %}
+
+{% with field_type=type|default:"text" %}
+  <div id="{{ container_id }}" class="{{ container_class }}">
+    <div class="row">
+      <div class="large-{{ lbl_large|default:2 }} medium-{{ lbl_medium|default:3 }} small-{{ lbl_small|default:3 }} columns">
+        <label for="id_{{ field.name }}" class="right inline">{{ field.label }}:
+          {% if field.field.required %}*{% endif %}
+        </label>
+      </div>
+      <div class="large-{{ large|default:3 }} medium-{{ medium|default:9 }} small-{{ small|default:9 }} columns end">
+        {% render_field field type=field_type class=class rows=rows %}
+        {{ field.errors }}
+      </div>
+    </div>
+  </div>
+{% endwith %}

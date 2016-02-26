@@ -1,0 +1,62 @@
+{% load i18n %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    {% trans "Budgets" %} 
+    <small>{{ start|date:"M Y" }}</small>
+    <a href="#" class="pull-right btn btn-default btn-xs" id="btn-budgets-panel-settings" data-toggle="modal" data-target="#pnl-budgets-panel-settings"><i class="fa fa-cog"></i></a>
+  </div>
+  <div class="panel-body">
+  {% if budgets %}
+    <div class="mb5">
+      {% trans "Current" %}: <strong>{{ budget_complete_avg|floatformat:"2" }}%</strong>
+      <small>
+        ({% trans "expected for today is" %}
+        <strong>{{ budget_complete_avg_expected|floatformat:"2" }}%</strong>)
+      </small>
+    </div>
+    <div class="progress">
+      <div class="progress-bar" style="width:{% if budget_complete_avg > 100 %}100{% else %}{{ budget_complete_avg|floatformat:"f" }}{% endif %}%; min-width: 2em">
+        {{ budget_complete_avg|floatformat:"2" }}%
+      </div>
+    </div>
+  {% else %}
+    {% trans "No budgets found for" %} {{ start|date:"F Y" }},
+    <a href="{% url 'budgets-create' %}">{% trans "click here to add" %}.</a>
+  {% endif %}
+  </div>
+</div>
+
+<!-- settings -->
+<div class="modal" id="pnl-budgets-panel-settings" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <form class="modal-content">
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="id_start">{% trans "Date" %}</label>
+          <input type="text" class="datepicker form-control" id="id_start" name="start" value="{{ start|date:"d/m/Y" }}" data-format="01/mm/yyyy">
+          <small class="help-block">{% trans "Only the month and year will be considered" %}</small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+        <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  $(function () {
+    var settings = $('#pnl-budgets-panel-settings');
+    
+    settings.find('form').submit(function () {
+      var $form = $(this);
+      settings.on('hidden.bs.modal', function () {
+        widget('budgets_panel', $form.serialize());
+      });
+      settings.modal('hide');
+      return false;
+    });
+  });
+</script>

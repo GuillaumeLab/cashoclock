@@ -1,0 +1,28 @@
+{% extends 'common/layout.html' %}
+{% load humanize transactions accounts %}
+
+{% block title %}Configurações{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-6">
+
+        <div class="panel panel-default">
+          <div class="panel-heading">Minha Conta</div>
+          <div class="panel-body">
+            <ul class="list-unstyled">
+              <li><a href="{% url 'password_change' %}">Alterar Senha</a></li>
+            </ul>
+          </div>
+        </div>
+
+        {% include 'finance/settings/_accounts.html' %}
+      </div>
+      <div class="col-xs-6">
+        {% include 'finance/settings/_categories.html' %}
+      </div>
+    </div>
+
+  </div>
+{% endblock %}

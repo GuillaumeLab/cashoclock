@@ -1,0 +1,80 @@
+{% load humanize transactions i18n %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    {% trans "Accounts" %}
+    <small>
+      {% if start %}{{ start|date:"d M Y" }} à {% endif %}
+      {% if end %}{{ end|date:"d M Y" }}{% endif %}
+    </small>
+    <a href="#" class="pull-right btn btn-default btn-xs" data-toggle="modal" data-target="#settings-panel"><i class="fa fa-cog"></i></a>
+  </div>
+  <table class="table table-hover table-striped">
+    <thead>
+    <tr>
+      <th>{% trans "Account" %}</th>
+      <th style="width:150px" class="text-right">{% trans "Balance" %}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for account in data.0 %}
+      <tr>
+        <td>
+          <a href="{% url 'accounts-detail' pk=account.0.pk %}">{{ account.0.name }}</a>
+        </td>
+        <td class="text-right text-{{ account.1|amount_color }}">$ {{ account.1|intcomma }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+    <tr>
+      <td colspan="2" class="text-right text-{{ data.1|amount_color }}">
+        <strong>$ {{ data.1|intcomma }}</strong></td>
+    </tr>
+    </tfoot>
+  </table>
+</div>
+
+<!-- settings -->
+<div class="modal" id="settings-panel" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <form class="modal-content">
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="id_start">{% trans "Start" %}</label>
+          <input type="text" class="datepicker form-control" id="id_start" name="start" value="{{ start|date:"d/m/Y" }}">
+        </div>
+        <div class="form-group">
+          <label for="id_start">{% trans "End" %}</label>
+          <input type="text" class="datepicker form-control" id="id_end" name="end" value="{{ end|date:"d/m/Y" }}">
+        </div>
+        <div class="form-group">
+          <div class="checkbox">
+            <label for="id_payed">
+              <input type="checkbox" id="id_payed" name="payed" {% if payed %}checked{% endif %}> {% trans "Payed only" %}
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+        <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  $(function () {
+    var settings = $('#settings-panel');
+    
+    settings.find('form').submit(function () {
+      var $form = $(this);
+      settings.on('hidden.bs.modal', function () {
+        widget('accounts_panel', $form.serialize());
+      });
+      settings.modal('hide');
+      return false;
+    });
+  });
+</script>

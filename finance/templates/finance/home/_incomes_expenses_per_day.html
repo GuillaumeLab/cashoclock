@@ -1,0 +1,84 @@
+{% load i18n %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    {% trans "Incomes vs Expenses per Day" %}
+    <small>
+      {% if start %}{{ start|date:"d M Y" }} - {% endif %}
+      {% if end %}{{ end|date:"d M Y" }}{% endif %}
+    </small>
+    <a href="#" class="pull-right btn btn-default btn-xs" data-toggle="modal" data-target="#incomes-expenses-per-day-settings"><i class="fa fa-cog"></i></a>
+  </div>
+  <div class="panel-body">
+    <div id="incomes-expenses-per-day-chart" class="hide-x" style="height: 400px;"></div>
+  </div>
+</div>
+
+<!-- settings -->
+<div class="modal" id="incomes-expenses-per-day-settings" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <form class="modal-content">
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="id_start">{% trans "Start" %}</label>
+          <input type="text" class="datepicker form-control" id="id_start" name="start" value="{{ start|date:"d/m/Y" }}">
+        </div>
+        <div class="form-group">
+          <label for="id_start">{% trans "End" %}</label>
+          <input type="text" class="datepicker form-control" id="id_end" name="end" value="{{ end|date:"d/m/Y" }}">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+        <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  $(function() {
+    var settings = $('#incomes-expenses-per-day-settings');
+    
+    settings.find('form').submit(function () {
+      var $form = $(this);
+      settings.on('hidden.bs.modal', function () {
+        widget('incomes_expenses_per_day', $form.serialize());
+      });
+      settings.modal('hide');
+      return false;
+    });
+
+    // chart
+
+    c3.generate({
+      bindto: "#incomes-expenses-per-day-chart",
+      data: {
+        rows: [
+          ['{% trans "Incomes" %}', '{% trans "Expenses" %}'],
+          {% for row in data %}
+            [{{ row.incomes|stringformat:"f" }}, {{ row.expenses|stringformat:"f" }}],
+          {% endfor %}
+        ],
+        type: 'area'
+      },
+      axis: {
+        x: {
+          type: 'category',
+          categories: [
+            {% for row in data %}
+              '{{ row.date|date:"d/m" }}',
+            {% endfor %}
+          ]
+        },
+        y: {
+          tick: {
+            format: D3BR.numberFormat("$,.f")
+          }
+        }
+      },
+      legend: {show: false},
+      color: {pattern: ["#43AC6A", "#F04124"]}
+    });
+  });
+</script>

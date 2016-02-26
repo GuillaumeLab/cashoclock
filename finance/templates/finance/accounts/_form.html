@@ -1,0 +1,14 @@
+{% load widget_tweaks %}{% csrf_token %}
+
+{{ form.non_field_errors }}{% render_field form.next type="hidden" %}
+
+{% include 'finance/form/_vfield.html' with field=form.name %}
+
+<div class="checkbox">
+  <label>
+    {% render_field form.is_savings %}
+    {{ form.is_savings.label }}
+  </label>
+</div>
+
+{% include 'finance/form/_vfield.html' with field=form.description %}

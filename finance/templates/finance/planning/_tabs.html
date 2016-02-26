@@ -1,0 +1,17 @@
+{% load utils %}
+
+<div class="row">
+  <div class="large-12 columns">
+    <ul class="tabs">
+      <li class="tab-title {% active '^/planning/?$' %}">
+        <a href="{% url 'planning-index' %}">Fluxo de Caixa</a>
+      </li>
+      <li class="tab-title {% active '^/budgets/?' %}">
+        <a href="{% url 'budgets-list' %}">Metas</a>
+      </li>
+      <li class="tab-title {% active '^/wishlist/?' %}">
+        <a href="{% url 'wishlist-list' %}">Lista de Desejos</a>
+      </li>
+    </ul>
+  </div>
+</div>

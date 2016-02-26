@@ -1,0 +1,80 @@
+{% extends 'common/layout.html' %}
+{% load humanize accounts budgets transactions i18n %}
+
+{% block title %}{% trans "Budgets" %}{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <a class="btn btn-primary" href="{% url 'budgets-create' %}?date={{ current_month|date:"d/m/Y" }}&next={{ request.build_absolute_uri|urlencode }}">{% trans "Add" %}</a>
+        {% if previous_month and next_month %}
+          <div class="btn-group">
+            <a class="btn btn-default" href="?date={{ previous_month|date:"d/m/Y" }}" class="button">{{ previous_month|date:"F" }}</a>
+            <a class="btn btn-default" href="?date={{ next_month|date:"d/m/Y" }}" class="button">{{ next_month|date:"F" }}</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">{{ current_month|date:"F Y" }}</div>
+      <div class="panel-body">
+        {% if object_list %}
+          {% regroup object_list by type as groups %}
+          {% for group in groups %}
+            <p><strong>{{ group.grouper|budget_type }}</strong></p>
+            {% for budget in group.list %}
+              {% with percent_complete=budget.percent_complete amount_complete=budget.amount_complete %}
+
+                <div class="mb5">
+                  <!-- labels -->
+                  {% if percent_complete >= 100 %}
+                    <i class="fa fa-{% if budget.type|is_debit_budget %}times text-danger{% else %}check text-success{% endif %}"></i>
+                  {% else %}
+                    <i class="fa fa-{% if budget.type|is_debit_budget %}check text-success{% else %}times text-danger{% endif %}"></i>
+                  {% endif %}
+                  {% if budget.category %}
+                    {{ budget.category.name }}
+                  {% endif %}
+                  <span class="text-{{ amount_complete|amount_color }}">
+                    $ {{ amount_complete|intcomma }} ({{ percent_complete|floatformat:"2" }}%)
+                  </span> {% trans "of" %} $ {{ budget.amount|intcomma }}
+
+                  <!-- edit link -->
+                  <a class="pull-right" href="{% url 'budgets-edit' pk=budget.pk %}?next={{ request.build_absolute_uri|urlencode }}">Editar</a>
+                </div>
+
+                <!-- progress bar -->
+                <div class="progress">
+                  {% if percent_complete >= 100 %}
+                    <div class="progress-bar progress-bar-{% if budget.type|is_debit_budget %}danger{% else %}success{% endif %}"
+                        style="width:{% if percent_complete > 100 %}100{% elif percent_complete > 0 %}{{ percent_complete|floatformat:"f" }}{% else %}0{% endif %}%; min-width: 3em">
+                      {{ percent_complete|floatformat:"2" }}%
+                    </div>
+                  {% else %}
+                    <div class="progress-bar progress-bar-{% if budget.type|is_debit_budget %}success{% else %}danger{% endif %}"
+                        style="width:{% if percent_complete > 100 %}100{% elif percent_complete > 0 %}{{ percent_complete|floatformat:"f" }}{% else %}0{% endif %}%; min-width: 3em">
+                      {{ percent_complete|floatformat:"2" }}%
+                    </div>
+                  {% endif %}
+                </div>
+              {% endwith %}
+            {% endfor %}
+            {% if not forloop.last %}
+              <hr class="mb-15">
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <div class="blank-slate">
+            <div class="blank-slate-title">{% trans "No budget for" %} {{ current_month|date:"F Y" }}.</div>
+            <div class="blank-slate-body">
+              <a class="btn btn-primary" href="{% url 'budgets-create' %}?date={{ current_month|date:"d/m/Y" }}&next={{ request.build_absolute_uri|urlencode }}">{% trans "Add" %}</a>
+            </div>
+          </div>
+        {% endif %}  
+      </div>
+    </div>
+  </div>
+ 
+{% endblock %}

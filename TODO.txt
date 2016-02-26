@@ -1,0 +1,79 @@
+BACKLOG
+=======
+
+- Envio de email
+    - X dias antes da data de vencimento de uma conta não paga (X deve ser configurável pelo usuário)
+    - Resumo do mês anterior todos os dias 1º
+- Notificações
+    - Transações não pagas com data anterior a "hoje"
+    - Avisos de sistema
+    - Dicas de uso do sistema e economia
+- Remover dependência de request.REQUEST
+    Criar um filter/tag pra recuperar de GET ou POST
+    Ex: request.GET.get('x', request.POST.get('x'))
+
+TODO
+====
+
+- Novo widget no painel, próximas transações agendadas
+- Botão para importar metas do mês anterior
+    - Se já existir NÃO sobrepor
+- Página de esqueci minha senha
+- Página de esqueci meu usuário
+
+DONE
+====
+
+- Ajustar estilo das mensagens de erro
+- Alterar sumário de metas para trazer 2 últimos meses ao invés do atual + anterior
+- Na inserção de metas, após usuário escolher a categoria, carregar ultimos 3 meses e média de quanto gastou/ganhou
+- Na exclusão de transações, nova opção para excluir todas as não pagas
+- Criar uma forma de visualizar meses diferentes no painel (igual nas transações)
+- Gráfico de gastos por dia do mês
+    - É o mesmo gráfico de Receitas vs Despesas só que por dia do mês
+- Selecionar mais de uma conta e categoria no filtro de transações
+- Adicionar filtro por descrição nas transações
+- Duplicar footer na tabela de transações em cima e ordernar por data decrescente por padrão
+- blank slate
+- bootstrap-datepicker
+- Preparar para receber novos usuários
+    - Criar categorias padrão (Transferência, Saldo Inicial)
+    - Criar contas padrão (Conta Corrente, Poupança, Carteira/Dinheiro)
+    - Criar transações de Saldo Inicial de R$ 0,00 para as contas novas
+- Blink e scroll para transação depois de add e update
+- Edição rápida de transações
+- Pensar em um forma de ir para conta rápido (hotkeys)
+- Configurar width minimo para tamanho do tablet (usando também meta tags no layout)
+- Configurar django-compressor
+- [BUG] Tela está se mexendo no Windows (chrome)
+- [BUG] faltando form errors na criação de contas
+- Sair fora do Flakes (treco bonitinho mas ordinário)
+- [BUG] Menu não está sumindo no layout responsivo
+- [BUG] Adicionar conta com saldo 0,00 não está funcionando
+- Criar marcador de meta esperada progress do dashboard
+- Usar currency input nas metas
+- Salvar estado da página para quando editar item voltar pro mesmo filtro (adicionar transação)
+- Manter estado do check "Transação Recorrente" após erro de usuário (adicionar transação)
+- Bug no campo de valor quando > 1000 (por causa do ponto no separador de milhar)
+- Máscara no valor da transação (sem precisar colocar virgula)
+- Criar links para passar mês no detalhe da conta
+- Retirar transações futuras
+- Recorrente
+- editar saldo inicial (conta corrente 754.69, dinheiro 3.69)
+- /reports/transactions-account - "Colors is not defined"
+- mudar descrição para campo texto normal
+- ordenar lista de contas em adicionar transação
+- adicionar datepicker ao filtro de transações
+- filtrar contas nos formularios para apenas o usuario logado!!
+- metas no dashboard não estão aparecendo
+- gráfico de evolução de ativos está errado
+- testar exclusão de transações, parece que está excluindo apenas uma (não está excluindo a related)
+- tirar parte de relatórios, incrementar o dashboard
+- Lista de contas de ativo e seus saldos acumulados
+- Gráfico de Principais Despesas, retornar as top 10
+- Cash Flow (Fluxo de Caixa) do mês, créditos comparados com débitos
+- Média geral das metas do mês
+    - Retirar "Próximas Metas"
+    - Incluir um link para Ver Todas
+- Gráfico de Despesas por Mês
+- Gráfico de Receitas por Mês

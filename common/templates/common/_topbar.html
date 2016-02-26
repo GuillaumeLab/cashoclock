@@ -1,0 +1,32 @@
+{% load utils i18n %}
+
+<nav class="navbar navbar-default navbar-static-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="{% url 'home' %}">CashO'Clock</a>
+    </div>
+
+    <ul class="nav navbar-nav">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          <i class="fa fa-plus"></i>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="{% url 'transactions-create' %}?next={{ request.build_absolute_uri|urlencode }}">{% trans "Transaction" %}</a></li>
+          <li><a href="{% url 'accounts-create' %}?next={{ request.build_absolute_uri|urlencode }}">{% trans "Account" %}</a></li>
+          <li><a href="{% url 'categories-create' %}?next={{ request.build_absolute_uri|urlencode }}">{% trans "Category" %}</a></li>
+          <li><a href="{% url 'budgets-create' %}?next={{ request.build_absolute_uri|urlencode }}">{% trans "Budget" %}</a></li>
+        </ul>
+      </li>
+      
+      <li class="{% active '^/?$' %}"><a href="{% url 'home' %}">{% trans "Dashboard" %}</a></li>
+      <li class="{% active '^/transactions/?' %}"><a href="{% url 'transactions-list' %}">{% trans "Transactions" %}</a></li>
+      <li class="{% active '^/budgets/?' %}"><a href="{% url 'budgets-list' %}">{% trans "Budgets" %}</a></li>
+    </ul>
+    
+    <ul class="nav navbar-nav navbar-right">
+      <li class="{% active '^/settings|accounts|categories/?' %}"><a href="{% url 'settings-index' %}">{% trans "Settings" %}</a></li>
+      <li><a href="{% url 'logout' %}">{% trans "Logoff" %}</a></li>
+    </ul>
+  </div>
+</nav>

@@ -1,0 +1,105 @@
+{% extends 'common/layout.html' %}
+{% load humanize i18n %}
+
+{% block title %}{{ object.name }}{% endblock %}
+
+{% block scripts %}
+  <script>
+    $(function () {
+      c3.generate({
+        bindto: "#balance-chart",
+        data: {
+          rows: [
+            ['$'],
+            {% for item in history %}
+              [{{ item.balance|floatformat:"f" }}],
+            {% endfor %}
+          ],
+          types: {'$': 'area'}
+        },
+        axis: {
+          x: {
+            type: 'category',
+            categories: [
+              {% for item in history %}
+                '{{ item.date|date:"SHORT_DATE_FORMAT" }}',
+              {% endfor %}
+            ]
+          },
+          y: {
+            tick: {
+              format: D3BR.numberFormat("$,.f")
+            }
+          }
+        },
+        legend: {show: false},
+        color: {pattern: ['#008CBA']}
+      });
+    })
+  </script>
+{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <div class="page-header">
+      <h1>{{ object.name }}</h1>
+    </div>
+  
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <a class="btn btn-default" href="{% url 'transactions-list' %}?account={{ object.pk }}">{% trans "Transactions" %}</a>
+        <a class="btn btn-default" href="{% url 'accounts-edit' pk=object.pk %}?next={{ request.build_absolute_uri|urlencode }}">{% trans "Edit" %}</a>
+        <a class="btn btn-danger pull-right" href="{% url 'accounts-delete' pk=object.pk %}?next={{ request.build_absolute_uri|urlencode }}">{% trans "Delete" %}</a>
+      </div>
+    </div>
+  
+    <div class="panel panel-default">
+      <div class="panel-body p20-md">
+        <div class="row">
+          <div class="col-xs-6">
+            <dl>
+              <dt>{% trans "Name" %}</dt>
+              <dd>{{ object.name }}</dd>
+            </dl>
+          </div>
+          <div class="col-xs-6">
+            <dl>
+              <dt>{% trans "Investment Account?" %}</dt>
+              <dd>{% if object.is_savings %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</dd>
+            </dl>
+          </div>
+        </div>
+        <dl>
+          <dt>{% trans "Description" %}</dt>
+          <dd>{{ object.description }}</dd>
+        </dl>
+        <div class="row">
+          <div class="col-xs-4">
+            <dl class="mb0">
+              <dt>{% trans "Expenses" %}</dt>
+              <dd class="text-danger">$ {{ debits|intcomma }}</dd>
+            </dl>
+          </div>
+          <div class="col-xs-4">
+            <dl class="mb0">
+              <dt>{% trans "Incomes" %}</dt>
+              <dd class="text-success">$ {{ credits|intcomma }}</dd>
+            </dl>
+          </div>
+          <div class="col-xs-4">
+            <dl class="mb0">
+              <dt>{% trans "Balance" %}</dt>
+              <dd class="text-{% if total > 0 %}success{% else %}danger{% endif %}">$ {{ total|intcomma }}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div id="balance-chart" class="hide-x" style="height: 400px;"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% load widget_tweaks transactions %}
+{% csrf_token %}
+
+{{ form.non_field_errors }}
+
+{% with transaction.is_transfer as is_transfer %}
+
+  {% render_field form.next type="hidden" %}
+
+  <div class="form-group">
+      <label for="id_type">{{ form.type.label }} *</label>
+    {% if not form.instance.pk %}
+      {% render_field form.type class="form-control" %}
+      {{ form.type.errors }}
+    {% else %}
+      {% if form.instance.is_transfer %}
+        <p class="form-control-static">{{ form.instance.type|type_str }}</p>
+        <input type="hidden" name="type" value="{{ form.instance.type }}">
+      {% else %}
+        <select id="id_type" name="type" class="form-control">
+          <option value="1" {% if form.instance.type == 1 %}selected="selected"{% endif %}>Débito</option>
+          <option value="2" {% if form.instance.type == 2 %}selected="selected"{% endif %}>Crédito</option>
+        </select>
+        {{ form.type.errors }}
+      {% endif %}
+    {% endif %}
+  </div>
+  
+  {% include 'finance/form/_vfield.html' with field=form.date class="form-control datepicker" %}
+  {% include 'finance/form/_vfield.html' with field=form.account %}
+
+  {% if not form.instance.pk %}
+    <div class="checkbox">
+      <label>
+        {% render_field form.is_recurrent data-toggle="collapse" data-target="#recurrence" %}
+        {{ form.is_recurrent.label }}
+      </label>
+    </div>
+    
+    <div class="collapse" id="recurrence">
+      <div class="well">
+        <div class="row">
+          <div class="col-xs-4">
+            {% include 'finance/form/_vfield.html' with field=form.installments %}
+          </div>
+          <div class="col-xs-8">
+            {% include 'finance/form/_vfield.html' with field=form.period %}
+          </div>
+        </div>
+        {{ form.installments.errors }}
+        {{ form.period.errors }}
+      </div>
+    </div>
+  {% endif %}
+  
+  {% if is_transfer %}
+    <div class="form-group">
+      <label>Transferência</label>
+      <p class="form-control-static">
+        {{ form.instance.transfer_related.account.name }}
+        <a href="{% url 'transactions-edit' pk=form.instance.transfer_related.pk %}?next={{ form.next.value|urlencode }}">Ver transação</a>
+      </p>
+      <input type="hidden" name="category" value="{{ form.instance.category.pk }}">
+    </div>
+  {% else %}
+    <div class="collapse in" id="category">
+      {% include 'finance/form/_vfield.html' with field=form.category %}
+    </div>
+    <div class="collapse" id="transfer">
+      {% include 'finance/form/_vfield.html' with field=form.transfer %}
+    </div>
+  {% endif %}
+
+  {% include 'finance/form/_vfield.html' with field=form.amount class="form-control currency" %}
+  {% include 'finance/form/_vfield.html' with field=form.description %}
+
+  <div class="checkbox">
+    <label>
+      {% render_field form.payed %}
+      {{ form.payed.label }}
+    </label>
+  </div>
+{% endwith %}
+
+<script>
+  // toggle transfer account
+  $(function () {
+    $('#id_type').change(function () {
+      var $el = $(this);
+      if ($el.val() === '3') {
+        $('#transfer').collapse('show');
+        $('#category').collapse('hide');
+      } else {
+        $('#transfer').collapse('hide');
+        $('#category').collapse('show');
+      }
+    });
+    if ($('#id_type').val() === '3') {
+      $('#transfer').collapse('show');
+      $('#category').collapse('hide');
+    }
+    if ($('#id_is_recurrent').prop('checked')) {
+      $('#recurrence').collapse('show');
+    } else {
+      $('#recurrence').collapse('hide');
+    }
+  });
+</script>

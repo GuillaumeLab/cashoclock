@@ -1,0 +1,25 @@
+{% comment %}
+TYPES OF TRANSACTIONS:
+debit = 1
+credit = 2
+{% endcomment %}
+
+{% comment %}
+TYPES OF ACCOUNTS:
+income = 1
+expense = 2
+asset = 3
+{% endcomment %}
+
+<select name="{{ field.name }}" id="id_{{ field.name }}" class="{{ class }}">
+    {% if account.type == 1 %} {# income #}
+        <option value="1{# debit #}" {% if field.value == 1 %}selected{% endif %}>Despesa</option>
+        <option value="2{# credit #}" {% if field.value == 2 %}selected{% endif %}>Receita</option>
+    {% elif account.type == 2 %} {# expense #}
+        <option value="1{# debit #}" {% if field.value == 1 %}selected{% endif %}>Despesa</option>
+        <option value="2{# credit #}" {% if field.value == 2 %}selected{% endif %}>Desconto</option>
+    {% elif account.type == 3 %} {# assets #}
+        <option value="1{# debit #}" {% if field.value == 1 %}selected{% endif %}>Depósito</option>
+        <option value="2{# credit #}" {% if field.value == 2 %}selected{% endif %}>Saque</option>
+    {% endif %}
+</select>

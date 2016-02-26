@@ -1,0 +1,30 @@
+{% extends 'common/layout.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Settings" %}{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <div class="page-header">
+      <h1>{% trans "Delete Category" %}</h1>
+    </div>
+
+    <div class="panel panel-danger">
+      <div class="panel-heading">{% trans "Attention!" %}</div>
+      <div class="panel-body">
+        <p>
+          {% blocktrans with name=object.name %}
+            Are you sure you want to delete the category
+            {{ name }} and all of it's transactions?
+          {% endblocktrans %}
+        </p>
+
+        <form action="" method="post">{% csrf_token %}
+          <button type="submit" class="btn btn-danger">{% trans "Delete" %}</button>
+          {% url 'settings-index' as ret_url %}
+          <a href="{{ request.REQUEST.next|default:ret_url }}" class="btn btn-link">{% trans "Cancel" %}</a>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

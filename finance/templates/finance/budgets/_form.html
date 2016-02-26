@@ -1,0 +1,48 @@
+{% load widget_tweaks %}
+
+{{ form.non_field_errors }}
+
+{% csrf_token %}
+
+{% render_field form.next type='hidden' %}
+
+{% include 'finance/form/_vfield.html' with field=form.type %}
+
+<div class="form-group">
+  <label for="id_month">{{ form.month.label }}: *</label>
+  <div class='row'>
+    <div class='col-xs-6'>{% render_field form.month class="form-control" %}</div>
+    <div class='col-xs-6'>{% render_field form.year class="form-control" %}</div>
+  </div>
+</div>
+
+<div id="category-container" class="collapse in">
+  {% include 'finance/form/_vfield.html' with field=form.category %}
+  <div id="category-summary"></div>
+</div>
+
+{% include 'finance/form/_vfield.html' with field=form.amount class='form-control currency' %}
+
+<script>
+  $(function() {
+    function toggleCategory() {
+      var val = $('#id_type').val();
+      if (val === '3') { // investment
+        $('#category-container').collapse('hide');
+      } else {
+        $('#category-container').collapse('show');
+      }
+    }
+    $('#id_type').change(toggleCategory);
+    toggleCategory();
+    
+    
+    $('#id_category').change(function() {
+      var id = $(this).val();
+      var url = "{% url 'categories-summary' pk='0' %}".replace('0', id);
+      $.get(url, function(html) {
+        $('#category-summary').html(html);
+      });
+    });
+  })
+</script>

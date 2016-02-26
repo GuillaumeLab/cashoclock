@@ -1,0 +1,11 @@
+{% load widget_tweaks %}
+
+{% with field_type=type|default:"text" cssClass=class|default:"form-control" placeholder=placeholder|default:"" %}
+  <div class="form-group">
+    <label for="id_{{ field.name }}">{{ field.label }}
+      {% if field.field.required %}*{% endif %}
+    </label>
+    {% render_field field type=field_type class=cssClass rows=rows data-placeholder=placeholder %}
+    {{ field.errors }}
+  </div>
+{% endwith %}

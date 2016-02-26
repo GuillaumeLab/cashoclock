@@ -1,0 +1,1 @@
+web: gunicorn cashoclock.wsgi --log-file -

@@ -1,0 +1,58 @@
+{% load humanize transactions utils %}
+
+<div class="row">
+  <div class="col-xs-3">
+    <div class="panel panel-default panel-card">
+      <div class="panel-heading">
+        Créditos 
+        <small class="pull-right">{{ start|date:"d M" }} - {{ end|date:"d M" }}</small>
+      </div>
+      <div class="panel-body">
+        <div class="text-success">
+          $ {{ credit_balance|intcomma }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-3">
+    <div class="panel panel-default panel-card">
+      <div class="panel-heading">
+        Débitos
+        <small class="pull-right">{{ start|date:"d M" }} - {{ end|date:"d M" }}</small>
+      </div>
+      <div class="panel-body">
+        <div class="text-danger">
+          $ {{ debit_balance|intcomma }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-3">
+    {% with credit_balance|sub:debit_balance as balance %}
+      <div class="panel panel-default panel-card">
+        <div class="panel-heading">
+          Saldo 
+          <small class="pull-right">{{ start|date:"d M" }} - {{ end|date:"d M" }}</small>
+        </div>
+        <div class="panel-body">
+          <div class="text-{{ balance|amount_color }}">
+            $ {{ balance|intcomma }}
+          </div>
+        </div>
+      </div>
+    {% endwith %}
+  </div>
+  <div class="col-xs-3">
+    <div class="panel panel-default panel-card">
+      <div class="panel-heading">
+        Total
+        <small class="pull-right">até {{ end|date:"d M" }}</small>
+      </div>
+      <div class="panel-body">
+        <div class="text-{{ total_balance|amount_color }}">
+          $ {{ total_balance|intcomma }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,69 @@
+{% load humanize utils i18n %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    {% trans "Cash Flow" %}
+    <small>
+      {% if start %}{{ start|date:"d M Y" }} - {% endif %}
+      {% if end %}{{ end|date:"d M Y" }}{% endif %}
+    </small>
+    <a href="#" class="pull-right btn btn-default btn-xs" data-toggle="modal" data-target="#cashflow-settings"><i class="fa fa-cog"></i></a>
+  </div>
+  <div class="panel-body">
+    <div class="mb5">
+      {% trans "Incomes" %}: <strong>$ {{ incomes|intcomma }}</strong>
+    </div>
+    <div class="progress">
+      <div class="progress-bar progress-bar-success" style="width:{% if incomes_percent > 100 %}100{% else %}{{ incomes_percent|floatformat:"f" }}{% endif %}%; min-width: 2em">
+        {{ incomes_percent|floatformat:"2" }}%
+      </div>
+    </div>
+  
+    <div class="mb5">
+      {% trans "Expenses" %}: <strong>$ {{ expenses|intcomma }}</strong>
+    </div>
+    <div class="progress">
+      <div class="progress-bar progress-bar-danger" style="width:{% if expenses_percent > 100 %}100{% else %}{{ expenses_percent|floatformat:"f" }}{% endif %}%; min-width: 2em">
+        {{ expenses_percent|floatformat:"2" }}%
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- settings -->
+<div class="modal" id="cashflow-settings" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <form class="modal-content">
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="id_start">{% trans "Start" %}</label>
+          <input type="text" class="datepicker form-control" id="id_start" name="start" value="{{ start|date:"d/m/Y" }}">
+        </div>
+        <div class="form-group">
+          <label for="id_start">{% trans "End" %}</label>
+          <input type="text" class="datepicker form-control" id="id_end" name="end" value="{{ end|date:"d/m/Y" }}">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+        <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  $(function () {
+    var settings = $('#cashflow-settings');
+    
+    settings.find('form').submit(function () {
+      var $form = $(this);
+      settings.on('hidden.bs.modal', function () {
+        widget('cashflow_panel', $form.serialize());
+      });
+      settings.modal('hide');
+      return false;
+    });
+  });
+</script>

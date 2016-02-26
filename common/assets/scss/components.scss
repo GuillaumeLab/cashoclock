@@ -1,0 +1,191 @@
+@import 'variables';
+@import "../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+
+$blank-slate-padding: 20px !default;
+
+// login panel
+
+.login-panel {
+  width: 400px !important;
+  margin-top: $grid-gutter-width * 2;
+}
+
+// loading widget
+
+.loading-widget {
+  padding: $padding-base-vertical $padding-base-horizontal;
+  border: 1px solid $panel-default-border;
+  -webkit-border-radius: $panel-border-radius;
+  -moz-border-radius: $panel-border-radius;
+  border-radius: $panel-border-radius;
+  background-color: $panel-bg;
+  margin-bottom: $line-height-computed;
+  @include box-shadow(0 1px 1px rgba(0,0,0,.05));
+}
+
+// blank slate
+
+.blank-slate {
+  padding: $blank-slate-padding;
+  text-align: center;
+
+  .blank-slate-title {
+    font-weight: 500;
+    font-size: $font-size-large;
+    margin-bottom: 10px;
+  }
+}
+
+// panel-card
+
+$panel-card-icon-width: 0px !default;
+$panel-card-icon-padding: ($panel-body-padding * 2) $panel-body-padding $panel-body-padding $panel-body-padding * 2 !default;
+
+.panel.panel-card {
+
+  .panel-heading {
+    font-size: $font-size-small;
+    color: $headings-small-color;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .panel-body {
+    padding-top: 0;
+    font-size: $font-size-h3;
+  }
+}
+
+// select2
+
+.select2 {
+  width: 100% !important;
+}
+
+.select2-container .select2-selection--single {
+  height: 36px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  line-height: 36px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 34px;
+}
+
+// django errorlist
+
+.errorlist {
+  list-style-type: none;
+  padding: 5px 0 0 0;
+
+  li {
+    color: $brand-danger;
+  }
+}
+
+// alerts
+
+.alert.alert-error {
+  background-color: $alert-danger-bg;
+  border-color: $alert-danger-border;
+  color: $alert-danger-text;
+}
+
+// navbar
+
+// http://work.smarchal.com/twbscolor/css/e74c3cc0392becf0f1ffbbbc0
+
+$bgDefault      : #066a19;
+$bgHighlight    : #025011;
+$colDefault     : #ffffff;
+$colHighlight   : #ffffff;
+$dropDown       : false;
+
+.navbar-default {
+  background-color: $bgDefault;
+  border-color: $bgHighlight;
+  .navbar-brand {
+    color: $colDefault;
+    &:hover, &:focus {
+      color: $colHighlight;
+    }
+  }
+  .navbar-text {
+    color: $colDefault;
+  }
+  .navbar-nav {
+    > li {
+      > a {
+        color: $colDefault;
+        &:hover, &:focus {
+          color: $colHighlight;
+        }
+      }
+      @if $dropDown {
+        > .dropdown-menu {
+          background-color: $bgDefault;
+          > li > a {
+            color: $colDefault;
+            &:hover, &:focus {
+              color: $colHighlight;
+              background-color: $bgHighlight;
+            }
+          }
+          .divider {
+            background-color: $bgHighlight;
+          }
+        }
+      }
+    }
+    > .active {
+      > a, > a:hover, > a:focus {
+        color: $colHighlight;
+        background-color: $bgHighlight;
+      }
+    }
+    > .open {
+      > a, > a:hover, > a:focus {
+        color: $colHighlight;
+        background-color: $bgHighlight;
+      }
+    }
+  }
+  .navbar-toggle {
+    border-color: $bgHighlight;
+    &:hover, &:focus {
+      background-color: $bgHighlight;
+    }
+    .icon-bar {
+      background-color: $colDefault;
+    }
+  }
+  .navbar-collapse,
+  .navbar-form {
+    border-color: $colDefault;
+  }
+  .navbar-link {
+    color: $colDefault;
+    &:hover {
+      color: $colHighlight;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu {
+    > li > a {
+      color: $colDefault;
+      &:hover, &:focus {
+        color: $colHighlight;
+      }
+    }
+    > .active {
+      > a, > a:hover, > a:focus {
+        color: $colHighlight;
+        background-color: $bgHighlight;
+      }
+    }
+  }
+}

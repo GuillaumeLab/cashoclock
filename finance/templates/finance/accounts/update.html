@@ -1,0 +1,26 @@
+{% extends 'common/layout.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Settings" %}{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <div class="page-header">
+      <h1>{{ object.name }}</h1>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <form action="{% url 'accounts-edit' pk=object.pk %}" method="post" class="p10-md">
+          {% include 'finance/accounts/_form.html' %}
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+            {% url 'settings-index' as ret_url %}
+            <a href="{{ request.REQUEST.next|default:ret_url }}" class="btn btn-link">{% trans "Cancel" %}</a>
+            <a href="{% url 'accounts-delete' pk=object.pk %}?next={{ request.build_absolute_uri|urlencode }}" class="pull-right btn btn-danger">{% trans "Delete" %}</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

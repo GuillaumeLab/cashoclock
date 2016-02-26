@@ -1,0 +1,39 @@
+{% load staticfiles utils %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}CashO'Clock{% endblock %}</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <script>
+    BASE_URL = '{% absolute_uri '/' %}';
+    WIDGETS_URL = BASE_URL + 'w/:name:';
+  </script>
+
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,500' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="{% static 'common/css/all.css' %}">
+  <script src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
+  <script src="{% static 'common/js/all.js' %}"></script>
+  
+  {% block head %}{% endblock %}
+  {% block scripts %}{% endblock %}
+</head>
+<body>
+
+{% block topbar %}
+  {% include 'common/_topbar.html' %}
+{% endblock %}
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+      {{ message|safe }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+{% block body %}{% endblock %}
+</body>
+</html>

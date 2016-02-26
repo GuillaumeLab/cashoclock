@@ -1,0 +1,59 @@
+{% extends 'common/layout.html' %}
+{% load transactions humanize utils %}
+
+{% block title %}Transações{% endblock %}
+
+{% block body %}
+  <div class="container">
+    {% comment %}<div class="page-header">
+      <h1>Transações <small>{{ current_month|date:"F Y" }}</small></h1>
+    </div>{% endcomment %}
+  
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <a class="btn btn-primary" href="{% url 'transactions-create' %}?next={{ request.build_absolute_uri|urlencode }}">Adicionar</a>
+        <div class="btn-group">
+          {% if previous_month and next_month %}
+            <span class="separator"></span>
+            {% with start=previous_month.0|date:"d/m/Y" end=previous_month.1|date:"d/m/Y" %}
+              <a href="{% update_querystring t=-1 start=start end=end %}" class="btn btn-default">{{ previous_month.0|date:"F" }}</a>
+            {% endwith %}
+            {% with start=next_month.0|date:"d/m/Y" end=next_month.1|date:"d/m/Y" %}
+              <a href="{% update_querystring t=-1 start=start end=end %}" class="btn btn-default">{{ next_month.0|date:"F" }}</a>
+            {% endwith %}
+          {% endif %}
+        </div>
+        <a href="#filters" class="btn btn-default pull-right" data-toggle="collapse">
+          <i class="fa fa-filter"></i>Filtrar
+        </a>
+      </div>
+    </div>
+  
+    <div class="panel panel-default collapse" id="filters">
+      <div class="panel-heading">Filtros</div>
+      <div class="panel-body">
+        <form action="{% url 'transactions-list' %}" method="get">
+          {% include 'finance/transactions/_filterform.html' with form=filter_form %}
+          <button type="submit" class="btn btn-default">Filtrar</button>
+          <a href="{% url 'transactions-list' %}" class="btn btn-link">Limpar</a>
+        </form>
+      </div>
+    </div>
+  
+    {% include 'finance/transactions/_balance_cards.html' %}
+  
+    <div class="panel panel-default">
+      {% if transactions %}
+        {% include 'finance/transactions/_list_full.html' %}
+      {% else %}
+        <div class="blank-slate">
+          <div class="blank-slate-title">Nenhuma transação encontrada para este filtro.</div>
+          <div class="blank-slate-body">
+            <a class="btn btn-primary" href="{% url 'transactions-create' %}?next={{ request.build_absolute_uri|urlencode }}">Adicionar Transação</a>
+            <a href="{% url 'transactions-list' %}" class="btn btn-default">Limpar Filtros</a>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
